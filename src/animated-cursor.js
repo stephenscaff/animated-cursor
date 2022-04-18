@@ -1,200 +1,270 @@
 import lerp from './utils/lerp'
 import hasExitedViewport from './utils/has-exited-viewport'
 import hexToRGB from './utils/hex-to-rgb'
-import clickables from './utils/clickables'
-// const lerp = (a, b, n) => (1 - n) * a + n * b
+import setStyles from './utils/set-styles'
 
-export default class AnimatedCursor {
-  constructor(options) {
+'use strict'
+
+const defaultOptions = {
+  cursorInnerSelector: '#cursor-inner',
+  cursorOuterSelector: '#cursor-outer',
+  hasRequiredStyles: true,
+  color: '#D3245C',
+  outerAlpha: 0.3,
+  size: { 
+    inner: 8, 
+    outer: 40 
+  },
+  hoverScale: {
+    inner: 0.75,
+    outer: 1.5
+  },
+  clickScale: {
+    inner: 1.5,
+    outer: 0.13
+  },
+  trailingSpeed: 0.2,
+  clickables: [
+    'a',
+    'input[type="text"]',
+    'input[type="email"]',
+    'input[type="number"]',
+    'input[type="submit"]',
+    'input[type="image"]',
+    'label[for]',
+    'select',
+    'textarea',
+    'button',
+    '.link'
+  ]
+}
+
+/**
+ * Animated Cursor
+ * Creates a custom animated cursor consisting of an outer and inner circles/dots.
+ * Outer dot has trailing animation effect.
+ * Dots scale when hovering on clickables, or clicking.
+ *
+ * @param {Object} options 
+ * @returns 
+ */
+function AnimatedCursor(options) {
+  // merge defaults with user options
+  let opts = Object.assign({}, defaultOptions, options);
+
+  let settings = {
+    cursorInner: document.querySelector(opts.cursorInnerSelector),
+    cursorOuter: document.querySelector(opts.cursorOuterSelector),
+    hasRequiredStyles: opts.hasRequiredStyles,
+    targetPos: { x: 0.5, y: 0.5 }, // mouse position
+    cursorPos: { x: 0.5, y: 0.5 }, // cursor position
+    endX: window.innerWidth / 2,
+    endY: window.innerHeight / 2,
+    raf: requestAnimationFrame(animateOuterCursor),
+    cursorVisible: true,
+    isScaled: false,
+    isClicking: false
+  }
+  
+  /**
+   * Init 
+   * Kicks off all the things
+   * @public
+   */
+  function init() {
+    bindEvents()
+    startCursor()
+    if (settings.hasRequiredStyles) setCursorStyles()
+    setCursorColor()
+    setCursorSize()
+  }
+
+  /**
+   * Bind Main Events
+   * Handles primary mouse and click events
+   */
+  function bindEvents() {
+
+    window.addEventListener('mousemove', onMouseMove)
     
-    const defaults = {
-      cursorEl:'#cursor',
-      cursorInnerSelector: '#cursor-inner',
-      cursorOuterSelector: '#cursor-outer',
-      cursorSize: { inner: 8, outer: 40 },
-      trailingSpeed: 0.2,
-      color: '#D3245C',
-      clickables: clickables
-    }
-    //options = options || {}
-    let self = this
-    Object.assign(self, defaults, options)
-
-    // config
-    this.cursorEl = document.querySelector(self.cursorEl)
-    this.cursorInner = document.querySelector(self.cursorInnerSelector)
-    this.cursorOuter = document.querySelector(self.cursorOuterSelector)
-    this.targetPos = { x: 0.5, y: 0.5 } // mouse position
-    this.cursorPos = { x: 0.5, y: 0.5 } // cursor position
-    this.endX = window.innerWidth / 2
-    this.endY = window.innerHeight / 2
-    this.trailingSpeed = self.trailingSpeed
-    this.color = self.color
-    this.cursorSize = self.cursorSize
-    this.cursorVisible = true
-    this.isScaled = false
-    this.isClicking = false
-
-
-    this.init()
-  }
-
-  init() {
-    this.bindAll()
-    this.bindEvents()
-    this.startCursor()
-    this.setCursorColor()
-    this.setCursorSize()
-  }
-
-  bindAll() {
-    // eslint-disable-line
-    ;['onMouseMove', 'animateOuterCursor'].forEach(
-      (fn) => (this[fn] = this[fn].bind(this))
-    )
-  }
-
-  bindEvents() {
-    window.addEventListener('mousemove', this.onMouseMove)
-    this.raf = requestAnimationFrame(this.animateOuterCursor)
-
     document
-      .querySelectorAll(clickables)
-      .forEach((el) => this.onClickableHover(el))
+      .querySelectorAll(opts.clickables.join(','))
+      .forEach((el) => onClickableHover(el))
 
     document.addEventListener('mousedown', () => {
-      this.isClicking = true
-      this.setScale()
-      // this.cursorInner.style.transform = 'translate(-50%, -50%) scale(1.5)'
-      // this.cursorOuter.style.transform = 'translate(-50%, -50%) scale(0.13)'
+      settings.isClicking = true
+      setScale()
     })
 
     document.addEventListener('mouseup', () => {
-      this.isScaled = false
-      this.isClicking = false
-      this.setScale()
+      settings.isScaled = false
+      settings.isClicking = false
+      setScale()
     })
 
     document.addEventListener('mouseleave', (e) => {
       if (hasExitedViewport(e)) {
-        this.isVisible = false
-        this.toggleVisibility()
+        settings.isVisible = false
+        toggleVisibility()
       }
     })
   }
 
-  styleCursorVar(cursorInner, cursorOuter) {
-    const color = hexToRGB(this.cursorColor)
-    const colorWithOpacity = rgba(this.cursorColor, 0.4)
-    cursorInner.style.setProperty('--cursor-color', color)
-    cursorOuter.style.setProperty('--cursor-color', colorWithOpacity)
+  /**
+   * Start Cursor
+   * Begins cursor visibility state
+   */
+  function startCursor() {
+    settings.isVisible = false
+    toggleVisibility()
   }
 
-  styleCursor() {
-    const colorInner = hexToRGB(this.color)
-    const colorOuter = hexToRGB(this.color, 0.4)
-    this.cursorInner.style.backgroundColor = colorInner
-    this.cursorOuter.style.backgroundColor = colorOuter
-  }
-
-  setCursorColor() {
-    const colorInner = hexToRGB(this.color)
-    const colorOuter = hexToRGB(this.color, 0.4)
-    this.cursorInner.style.setProperty('background-color', colorInner)
-    this.cursorOuter.style.setProperty('background-color', colorOuter)
-  }
-
-  setCursorSize() {
-    this.cursorInner.style.setProperty('width', `${this.cursorSize.inner}px`)
-    this.cursorInner.style.setProperty('height', `${this.cursorSize.inner}px`)
-    this.cursorOuter.style.setProperty('width', `${this.cursorSize.outer}px`)
-    this.cursorOuter.style.setProperty('height', `${this.cursorSize.outer}px`)
-  }
-
-  startCursor() {
-    this.isVisible = false
-    this.toggleVisibility()
-  }
-
-  onMouseMove(e) {
-    this.isVisible = true
-    this.toggleVisibility()
+  /**
+   * on Mouse Move 
+   * Handles the cursor mouse event, sending x,y coords to animation events.
+   * Uses RAF loop for outer/trailing cursor animation.
+   * @param {Event} e - mousemove event 
+   */
+  function onMouseMove(e) {
+    settings.isVisible = true
+    toggleVisibility()
     //get normalized mouse coordinates [0, 1]
-    this.targetPos.x = e.clientX
-    this.targetPos.y = e.clientY
-
-    this.animateInnerCursor(e.clientY, e.clientX)
+    settings.targetPos.x = e.clientX
+    settings.targetPos.y = e.clientY
+    animateInnerCursor(e.clientY, e.clientX)
     // trigger loop if no loop is active
-    if (!this.raf) this.raf = requestAnimationFrame(this.animateOuterCursor)
+    if (!settings.raf) settings.raf = requestAnimationFrame(animateOuterCursor)
   }
 
-  animateInnerCursor(y, x) {
-    this.cursorInner.style.top = `${y}px`
-    this.cursorInner.style.left = `${x}px`
+  /**
+   * Animate Inner Cursor 
+   * @param {Number} y - y coords
+   * @param {Number} x - x coords
+   */
+  function animateInnerCursor(y, x) {
+    settings.cursorInner.style.top = `${y}px`
+    settings.cursorInner.style.left = `${x}px`
   }
 
-  animateOuterCursor() {
+  /**
+   * Animate Outer Cursor 
+   * Outer cursor trailing animation. Uses lerp
+   * @returns 
+   */
+  function animateOuterCursor() {
     //calculate lerped values
-    this.cursorPos.x = lerp(
-      this.cursorPos.x,
-      this.targetPos.x,
-      this.trailingSpeed
+    settings.cursorPos.x = lerp(
+      settings.cursorPos.x,
+      settings.targetPos.x,
+      opts.trailingSpeed
     )
-    this.cursorPos.y = lerp(
-      this.cursorPos.y,
-      this.targetPos.y,
-      this.trailingSpeed
+    settings.cursorPos.y = lerp(
+      settings.cursorPos.y,
+      settings.targetPos.y,
+      opts.trailingSpeed
     )
-    this.cursorOuter.style.top = `${this.cursorPos.y}px`
-    this.cursorOuter.style.left = `${this.cursorPos.x}px`
+    settings.cursorOuter.style.top = `${settings.cursorPos.y}px`
+    settings.cursorOuter.style.left = `${settings.cursorPos.x}px`
 
     //cancel loop if mouse stops moving
     const delta = Math.sqrt(
-      Math.pow(this.targetPos.x - this.cursorPos.x, 2) +
-        Math.pow(this.targetPos.y - this.cursorPos.y, 2)
+      Math.pow(settings.targetPos.x - settings.cursorPos.x, 2) +
+        Math.pow(settings.targetPos.y - settings.cursorPos.y, 2)
     )
     if (delta < 0.001) {
-      window.cancelAnimationFrame(this.raf)
-      this.raf = null
+      window.cancelAnimationFrame(settings.raf)
+      settings.raf = null
       return
     }
     //or continue looping if mouse is moving
-    this.raf = requestAnimationFrame(this.animateOuterCursor)
+    settings.raf = requestAnimationFrame(animateOuterCursor)
   }
 
-  onClickableHover(el) {
+  function onClickableHover(el) {33
     el.style.cursor = 'none'
 
     el.addEventListener('mouseover', () => {
-      this.isScaled = true
-      this.setScale()
+      settings.isScaled = true
+      setScale()
     })
+
     el.addEventListener('mouseout', () => {
-      this.isScaled = false
-      this.setScale()
+      settings.isScaled = false
+      setScale()
     })
   }
 
-  setScale() {
-    if (this.isClicking) {
-      this.cursorInner.style.transform = 'translate(-50%, -50%) scale(1.5)'
-      this.cursorOuter.style.transform = 'translate(-50%, -50%) scale(0.13)'
-    } else if (this.isScaled) {
-      this.cursorInner.style.transform = 'translate(-50%, -50%) scale(0.75)'
-      this.cursorOuter.style.transform = 'translate(-50%, -50%) scale(1.5)'
+  /**
+   * Toggle Visibility 
+   * 
+   */
+  function toggleVisibility() {
+    if (settings.isVisible) {
+      settings.cursorInner.style.opacity = 1
+      settings.cursorOuter.style.opacity = 1
     } else {
-      this.cursorInner.style.transform = 'translate(-50%, -50%) scale(1)'
-      this.cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)'
+      settings.cursorInner.style.opacity = 0
+      settings.cursorOuter.style.opacity = 0
     }
   }
 
-  toggleVisibility() {
-    if (this.isVisible) {
-      this.cursorInner.style.opacity = 1
-      this.cursorOuter.style.opacity = 1
-    } else {
-      this.cursorInner.style.opacity = 0
-      this.cursorOuter.style.opacity = 0
+  /**
+   * Set Required Cursor Styles
+   */
+  function setCursorStyles() {
+    const styles = {
+      'pointer-events': 'none',
+      'position': 'fixed',
+      'border-radius': '50%',
+      'opacity': 0,
+      'transform': 'translate(-50%, -50%)',
+      'transition': 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
     }
+    setStyles('#cursor-inner', styles);
+    setStyles('#cursor-outer', styles);
+  }
+
+  /**
+   * Set Scale Effect
+   */
+  function setScale() {
+    if (settings.isClicking) {
+      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.clickScale.inner})`
+      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.clickScale.outer})`
+    } else if (settings.isScaled) {
+      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.hoverScale.inner})`
+      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.hoverScale.outer})`
+    } else {
+      settings.cursorInner.style.transform = 'translate(-50%, -50%) scale(1)'
+      settings.cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)'
+    }
+  }
+
+  /**
+   * Set Cursor Color
+   */
+  function setCursorColor() {
+    const colorInner = hexToRGB(opts.color)
+    const colorOuter = hexToRGB(opts.color, opts.outerAlpha)
+    settings.cursorInner.style.setProperty('background-color', colorInner)
+    settings.cursorOuter.style.setProperty('background-color', colorOuter)
+  }
+
+  /**
+   * Set Cursor Sizes
+   */
+  function setCursorSize() {
+    settings.cursorInner.style.setProperty('width', `${opts.size.inner}px`)
+    settings.cursorInner.style.setProperty('height', `${opts.size.inner}px`)
+    settings.cursorOuter.style.setProperty('width', `${opts.size.outer}px`)
+    settings.cursorOuter.style.setProperty('height', `${opts.size.outer}px`)
+  }
+
+  return {
+    init: init
   }
 }
+
+AnimatedCursor.options = defaultOptions;
+
+export default AnimatedCursor;

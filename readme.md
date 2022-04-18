@@ -2,6 +2,17 @@
 
 A pure JS library to replace native cursor with a custom animated cursor.
 
+[Check out the Demo](https://stephenscaff.github.io/animated-cursor/)
+
+
+## Contents 
+
+1. [📌 Features](#-features)
+2. [🎯 Quickstart](#-quickstart)
+3. [🧬 Options](#-options)
+4. [🤖 Commands](#-commands)
+5. [🕹️ Usage](#-usage)
+
 ## Features 
 - Replaces native Cursor with custom cursor that animates
 - Cursor is comprised of inner dot and outer circle that trails on move. Cursor elements inversely scale on click and hover.
@@ -10,13 +21,13 @@ A pure JS library to replace native cursor with a custom animated cursor.
 - Cursor is just a dom element that you can further style (ie: add border to outer cursor)
 - Hybrid NPM module, works with `import` and `require`
 
+<br/>
 
 ## Cursor is comprised of 
 - An inner dot (`cursorInner`)
 - An outer, outlining circle (`cursorOuter`), with slight opacity based on the inner cursor's color
 - A slight trailing animation of the outer outline
 - An inversely scaling effect between the inner and outer cursor parts on click or link hover
-
 
 <br>
 
@@ -45,6 +56,8 @@ const ac = AnimatedCursor()
 
 ac.init()
 ```
+
+<br/>
 
 ## 🧬 Options
 

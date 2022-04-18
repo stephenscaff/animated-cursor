@@ -1,3 +1,3 @@
-import AnimatedCursor from './animated-cur.js'
+import AnimatedCursor from './animated-cursor.js'
 
 export default AnimatedCursor

@@ -1,0 +1,12 @@
+.DS_Store
+.cache
+.parcel-cache
+.cache
+.tmp
+*.log
+.gitignore
+node_modules
+npm-debug.log
+demo
+docs
+src

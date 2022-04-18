@@ -56,7 +56,7 @@ ac.init()
 | `cursorOuterSelector`     | `String`          | Selector name of outer cursor element.                         | `#cursor-outer`   |
 | `useRequiredStyles`       | `Boolean`         | If lib should add required styles to element.                  | `true`            |
 | `size`                    | `Object`          | Defines inner `size.inner` and Outer `size.outer` cursor sizes | `size: { inner: 8, outer: 40 }` |
-| `scale`                   | `Object`          | Defines scale amounts of inner/outer cursors `onHover` and `onClicking` | `scale: {
+| `scale`                   | `Object`          | Defines scale amounts of inner/outer cursors `onHover` and `onClicking` | ```scale: {
     onHover: {
       inner: 0.75,
       outer: 1.5
@@ -65,7 +65,7 @@ ac.init()
       inner: 1.5,
       outer: 0.13
     }
-  }`
+  }```
 | `trailingSpeed`         | `Number`          | Speed of outer cursor's lerp'd trailing animation               | `0.2`           |
 | `color`                 | `String`          | Hex value of desired color.                                     | `#D3245C`       |
 | `clickables`            | `Array`           | Array of clickable elements.                                    | `[

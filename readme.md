@@ -55,11 +55,13 @@ ac.init()
 | `cursorInnerSelector`     | `String`          | Selector name of inner cursor element.                         | `#cursor-inner`   |
 | `cursorOuterSelector`     | `String`          | Selector name of outer cursor element.                         | `#cursor-outer`   |
 | `useRequiredStyles`       | `Boolean`         | If lib should add required styles to element.                  | `true`            |
+| `color`                   | `String`          | Hex value of desired color.                                     | `#D3245C`       |
+| `outerAlpha`              | `String`          | Alpha transparency level of outer cursor (0 - 1).               | `0.3`       |
 | `size`                    | `Object`          | Defines inner `size.inner` and Outer `size.outer` cursor sizes | `size: { inner: 8, outer: 40 }` |
-| `scale`                   | `Object`          | Defines scale amounts of inner/outer cursors `onHover` and `onClicking` | `scale: { onHover: { inner: 0.75, outer: 1.5 }, onClicking: { inner: 1.5, outer: 0.13 }}` |
-| `trailingSpeed`         | `Number`          | Speed of outer cursor's lerp'd trailing animation               | `0.2`           |
-| `color`                 | `String`          | Hex value of desired color.                                     | `#D3245C`       |
-| `clickables`            | `Array`           | Array of clickable elements.                                    | `['a', 'input[type="text"]', 'input[type="email"]', 'input[type="number"]', 'input[type="submit"]', 'input[type="image"]', 'label[for]', 'select', 'textarea', 'button', '.link']` |
+| `hoverScale`              | `Object`          | Defines amounts inner/outer cursors scale on hover             | `hoverScale: { inner: 0.75, outer: 1.5 }` |
+| `clickScale`              | `Object`          | Defines amounts inner/outer cursors scale on click             | `clickScale: { inner: 1.5, outer: 0.13 }` |
+| `trailingSpeed`           | `Number`          | Speed of outer cursor's lerp'd trailing animation               | `0.2`           |
+| `clickables`              | `Array`           | Array of clickable elements.                                    | `['a', 'input[type="text"]', 'input[type="email"]', 'input[type="number"]', 'input[type="submit"]', 'input[type="image"]', 'label[for]', 'select', 'textarea', 'button', '.link']` |
 
 <br>  
 
@@ -94,4 +96,62 @@ Runs the demo project via Parcel.
 <br/>
 
 
+## 🕹️ Usage 
 
+### Cursor markup 
+
+The cursor is created from 2 dom elements for the inner and outer parts. 
+
+```
+<div id="cursor">
+  <div id="cursor-outer"></div>
+  <div id="cursor-inner"></div>
+</div>
+```
+
+
+You can use the default selector names (shown above), or pass your own via the options, `cursorInnerSelector` and `cursorOuterSelector`
+
+```
+const opts = {
+  cursorInnerSelector: '#js-cursor-outer`
+  cursorOuterSelector '#js-cursor-inner',
+  ....
+}
+```
+
+### Init Cursor 
+
+```
+import AnimatedCursor from 'animated-cursor'
+
+// cursor options
+let options = {
+  color: '#fff',
+  outerAlpha: 0.3,
+  trailingSpeed: 0.2,
+  cursorSize: { inner: 8, outer: 38 }
+}
+
+const ac = AnimatedCursor(options)
+
+ac.init()
+```
+
+### useRequiredStyles
+
+For the cursors to work, some styles are require for positioning, radius, pointer-events, stating opacity, and transitions.
+By default, AnimatedCursor adds these styles via JS, directly on the cursor elements. If you'd prefer, you can stop the lib from adding those inline styles in favor of css. 
+Just set `useRequiredStyles: false` and provide your own css to the inner/outer cursor selectors.
+
+```
+#cursor-inner,
+#cursor-outer {
+  pointer-events: none;
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
+}
+```

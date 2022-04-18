@@ -9,19 +9,21 @@ const defaultOptions = {
   cursorInnerSelector: '#cursor-inner',
   cursorOuterSelector: '#cursor-outer',
   hasRequiredStyles: true,
-  size: { inner: 8, outer: 40 },
-  scale: {
-    onHover: {
-      inner: 0.75,
-      outer: 1.5
-    },
-    onClicking: {
-      inner: 1.5,
-      outer: 0.13
-    }
+  color: '#D3245C',
+  outerAlpha: 0.3,
+  size: { 
+    inner: 8, 
+    outer: 40 
+  },
+  hoverScale: {
+    inner: 0.75,
+    outer: 1.5
+  },
+  clickScale: {
+    inner: 1.5,
+    outer: 0.13
   },
   trailingSpeed: 0.2,
-  color: '#D3245C',
   clickables: [
     'a',
     'input[type="text"]',
@@ -58,9 +60,6 @@ function AnimatedCursor(options) {
     cursorPos: { x: 0.5, y: 0.5 }, // cursor position
     endX: window.innerWidth / 2,
     endY: window.innerHeight / 2,
-    trailingSpeed: opts.trailingSpeed,
-    color: opts.color,
-    size: opts.size,
     raf: requestAnimationFrame(animateOuterCursor),
     cursorVisible: true,
     isScaled: false,
@@ -157,12 +156,12 @@ function AnimatedCursor(options) {
     settings.cursorPos.x = lerp(
       settings.cursorPos.x,
       settings.targetPos.x,
-      settings.trailingSpeed
+      opts.trailingSpeed
     )
     settings.cursorPos.y = lerp(
       settings.cursorPos.y,
       settings.targetPos.y,
-      settings.trailingSpeed
+      opts.trailingSpeed
     )
     settings.cursorOuter.style.top = `${settings.cursorPos.y}px`
     settings.cursorOuter.style.left = `${settings.cursorPos.x}px`
@@ -230,11 +229,11 @@ function AnimatedCursor(options) {
    */
   function setScale() {
     if (settings.isClicking) {
-      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.scale.onClicking.inner})`
-      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.scale.onClicking.outer})`
+      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.clickScale.inner})`
+      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.clickScale.outer})`
     } else if (settings.isScaled) {
-      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.scale.onHover.inner})`
-      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.scale.onHover.outer})`
+      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.hoverScale.inner})`
+      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.hoverScale.outer})`
     } else {
       settings.cursorInner.style.transform = 'translate(-50%, -50%) scale(1)'
       settings.cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)'
@@ -245,8 +244,8 @@ function AnimatedCursor(options) {
    * Set Cursor Color
    */
   function setCursorColor() {
-    const colorInner = hexToRGB(settings.color)
-    const colorOuter = hexToRGB(settings.color, 0.4)
+    const colorInner = hexToRGB(opts.color)
+    const colorOuter = hexToRGB(opts.color, opts.outerAlpha)
     settings.cursorInner.style.setProperty('background-color', colorInner)
     settings.cursorOuter.style.setProperty('background-color', colorOuter)
   }
@@ -255,10 +254,10 @@ function AnimatedCursor(options) {
    * Set Cursor Sizes
    */
   function setCursorSize() {
-    settings.cursorInner.style.setProperty('width', `${settings.size.inner}px`)
-    settings.cursorInner.style.setProperty('height', `${settings.size.inner}px`)
-    settings.cursorOuter.style.setProperty('width', `${settings.size.outer}px`)
-    settings.cursorOuter.style.setProperty('height', `${settings.size.outer}px`)
+    settings.cursorInner.style.setProperty('width', `${opts.size.inner}px`)
+    settings.cursorInner.style.setProperty('height', `${opts.size.inner}px`)
+    settings.cursorOuter.style.setProperty('width', `${opts.size.outer}px`)
+    settings.cursorOuter.style.setProperty('height', `${opts.size.outer}px`)
   }
 
   return {

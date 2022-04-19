@@ -204,6 +204,8 @@ let acOptions = {
 }
 ```
 
+[Check out the Donut Cursor Demo](https://stephenscaff.github.io/animated-cursor/donut.html)
+
 <br/>
 
 ## 📅 ToDos
@@ -212,5 +214,6 @@ let acOptions = {
 - ~~Add a demo for Donut-style cursor~~
 - ~~Make clickables an option.~~dsss
 - ~~Make hybrid npm module to support `import` and `require`~~.
+- ~~Make hiding native cursor an option.~~.
 - Limit to non touch or non mobile devices.
 - Provide a destory method

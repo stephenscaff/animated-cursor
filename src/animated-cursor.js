@@ -2,6 +2,7 @@ import lerp from './utils/lerp'
 import hasExitedViewport from './utils/has-exited-viewport'
 import hexToRGB from './utils/hex-to-rgb'
 import setStyles from './utils/set-styles'
+import isTouchDevice from './utils/is-touch-device'
 
 'use strict'
 
@@ -9,6 +10,7 @@ const defaultOptions = {
   cursorInnerSelector: '#cursor-inner',
   cursorOuterSelector: '#cursor-outer',
   hasRequiredStyles: true,
+  hideNativeCursor: true,
   color: '#D3245C',
   outerAlpha: 0.3,
   outerBorderSize: 0,
@@ -73,12 +75,17 @@ function AnimatedCursor(options) {
    * @public
    */
   function init() {
+
+    // bail if Touch device
+    if (isTouchDevice()) return
+
     bindEvents()
     startCursor()
-    if (opts.hasRequiredStyles) setCursorStyles()
-    if (opts.outerBorderSize > 0) setOuterBorder()
     setCursorColor()
     setCursorSize()
+    if (opts.hideNativeCursor) hideNativeCursor()
+    if (opts.hasRequiredStyles) setCursorStyles()
+    if (opts.outerBorderSize > 0) setOuterBorder()
   }
 
   /**
@@ -213,6 +220,14 @@ function AnimatedCursor(options) {
       settings.cursorInner.style.opacity = 0
       settings.cursorOuter.style.opacity = 0
     }
+  }
+
+  /**
+   * Hide Native Cursor
+   */
+  function hideNativeCursor() {
+    document.querySelector('body').style.cursor = 'none'
+    document.querySelector('html').style.cursor = 'none'
   }
 
   /**

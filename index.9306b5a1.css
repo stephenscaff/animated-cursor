@@ -16,10 +16,6 @@ html, body {
   cursor: none;
 }
 
-:root {
-  --cursor-color: "#09f";
-}
-
 a {
   color: #fff;
   border-bottom: 1px solid #ffffffb3;

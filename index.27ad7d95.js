@@ -528,37 +528,7 @@ var _animatedCursorJs = require("./animated-cursor.js");
 var _animatedCursorJsDefault = parcelHelpers.interopDefault(_animatedCursorJs);
 exports.default = _animatedCursorJsDefault.default;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./animated-cursor.js":"gL4Wz"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"gL4Wz":[function(require,module,exports) {
+},{"./animated-cursor.js":"gL4Wz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gL4Wz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _lerp = require("./utils/lerp");
@@ -640,7 +610,7 @@ const defaultOptions = {
    */ function init() {
         bindEvents();
         startCursor();
-        if (settings.hasRequiredStyles) setCursorStyles();
+        if (opts.hasRequiredStyles) setCursorStyles();
         setCursorColor();
         setCursorSize();
     }
@@ -717,7 +687,11 @@ const defaultOptions = {
         //or continue looping if mouse is moving
         settings.raf = requestAnimationFrame(animateOuterCursor);
     }
-    function onClickableHover(el) {
+    /**
+   * On Clickable Hover 
+   * When hovering over a clickable, handle scale animation
+   * @param {HTMLelement} el 
+   */ function onClickableHover(el) {
         el.style.cursor = 'none';
         el.addEventListener('mouseover', ()=>{
             settings.isScaled = true;
@@ -730,7 +704,6 @@ const defaultOptions = {
     }
     /**
    * Toggle Visibility 
-   * 
    */ function toggleVisibility() {
         if (settings.isVisible) {
             settings.cursorInner.style.opacity = 1;
@@ -751,8 +724,8 @@ const defaultOptions = {
             'transform': 'translate(-50%, -50%)',
             'transition': 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
         };
-        _setStylesDefault.default('#cursor-inner', styles);
-        _setStylesDefault.default('#cursor-outer', styles);
+        _setStylesDefault.default(opts.cursorInnerSelector, styles);
+        _setStylesDefault.default(opts.cursorOuterSelector, styles);
     }
     /**
    * Set Scale Effect
@@ -799,7 +772,37 @@ function lerp(a, b, n) {
 }
 exports.default = lerp;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dFz2H":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"dFz2H":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function hasExitedViewport(event) {

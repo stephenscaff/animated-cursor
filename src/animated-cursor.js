@@ -11,6 +11,7 @@ const defaultOptions = {
   hasRequiredStyles: true,
   color: '#D3245C',
   outerAlpha: 0.3,
+  outerBorderSize: 0,
   size: { 
     inner: 8, 
     outer: 40 
@@ -75,6 +76,7 @@ function AnimatedCursor(options) {
     bindEvents()
     startCursor()
     if (opts.hasRequiredStyles) setCursorStyles()
+    if (opts.outerBorderSize > 0) setOuterBorder()
     setCursorColor()
     setCursorSize()
   }
@@ -171,6 +173,7 @@ function AnimatedCursor(options) {
       Math.pow(settings.targetPos.x - settings.cursorPos.x, 2) +
         Math.pow(settings.targetPos.y - settings.cursorPos.y, 2)
     )
+     
     if (delta < 0.001) {
       window.cancelAnimationFrame(settings.raf)
       settings.raf = null
@@ -222,10 +225,21 @@ function AnimatedCursor(options) {
       'border-radius': '50%',
       'opacity': 0,
       'transform': 'translate(-50%, -50%)',
-      'transition': 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
+      'transition': 'opacity 0.25s ease-in-out, transform 0.25s ease-in-out'
     }
     setStyles(opts.cursorInnerSelector, styles);
     setStyles(opts.cursorOuterSelector, styles);
+  }
+
+
+  /**
+   * Set Cursor Sizes
+   */
+  function setCursorSize() {
+    settings.cursorInner.style.setProperty('width', `${opts.size.inner}px`)
+    settings.cursorInner.style.setProperty('height', `${opts.size.inner}px`)
+    settings.cursorOuter.style.setProperty('width', `${opts.size.outer}px`)
+    settings.cursorOuter.style.setProperty('height', `${opts.size.outer}px`)
   }
 
   /**
@@ -255,13 +269,14 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Set Cursor Sizes
+   * Set Outer Cursor Border 
+   * Creates a donut cursor if outerAlpha is also 0
    */
-  function setCursorSize() {
-    settings.cursorInner.style.setProperty('width', `${opts.size.inner}px`)
-    settings.cursorInner.style.setProperty('height', `${opts.size.inner}px`)
-    settings.cursorOuter.style.setProperty('width', `${opts.size.outer}px`)
-    settings.cursorOuter.style.setProperty('height', `${opts.size.outer}px`)
+  function setOuterBorder() {
+    settings.cursorOuter.style.setProperty(
+      'border', 
+      `${opts.outerBorderSize}px solid ${opts.color}`
+    )
   }
 
   return {

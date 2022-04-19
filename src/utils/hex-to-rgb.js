@@ -20,6 +20,9 @@
     hex.length == 3 ? hex.slice(2, 3).repeat(2) : hex.slice(4, 6),
     16
   )
+  if (alpha === 0) {
+    return `rgba(${r}, ${g}, ${b}, 0)`
+  }
   if (alpha) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`
   }

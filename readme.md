@@ -12,6 +12,7 @@ A pure JS library to replace native cursor with a custom animated cursor.
 3. [🧬 Options](#-options)
 4. [🤖 Commands](#-commands)
 5. [🕹️ Usage](#-usage)
+6. [📅 To Dos](#-to-dos)
 
 <br/>
 
@@ -72,13 +73,14 @@ ac.init()
 | `cursorInnerSelector`     | `String`          | Selector name of inner cursor element.                         | `#cursor-inner`   |
 | `cursorOuterSelector`     | `String`          | Selector name of outer cursor element.                         | `#cursor-outer`   |
 | `useRequiredStyles`       | `Boolean`         | If lib should add required styles to element.                  | `true`            |
-| `color`                   | `String`          | Hex value of desired color.                                     | `#D3245C`       |
-| `outerAlpha`              | `String`          | Alpha transparency level of outer cursor (0 - 1).               | `0.3`       |
+| `color`                   | `String`          | Hex value of desired color.                                    | `#D3245C`       |
+| `outerAlpha`              | `Number`          | Alpha transparency level of outer cursor (0 - 1).              | `0.3`       |
+| `outerBorderSize`         | `Number`          | Applies a border to the outer cursor.               | `0.3`    |
 | `size`                    | `Object`          | Defines inner `size.inner` and Outer `size.outer` cursor sizes | `size: { inner: 8, outer: 40 }` |
 | `hoverScale`              | `Object`          | Defines amounts inner/outer cursors scale on hover             | `hoverScale: { inner: 0.75, outer: 1.5 }` |
 | `clickScale`              | `Object`          | Defines amounts inner/outer cursors scale on click             | `clickScale: { inner: 1.5, outer: 0.13 }` |
-| `trailingSpeed`           | `Number`          | Speed of outer cursor's lerp'd trailing animation               | `0.2`           |
-| `clickables`              | `Array`           | Array of clickable elements.                                    | `['a', 'input[type="text"]', 'input[type="email"]', 'input[type="number"]', 'input[type="submit"]', 'input[type="image"]', 'label[for]', 'select', 'textarea', 'button', '.link']` |
+| `trailingSpeed`           | `Number`          | Speed of outer cursor's lerp'd trailing animation              | `0.2`           |
+| `clickables`              | `Array`           | Array of clickable elements.                                   d| `['a', 'input[type="text"]', 'input[type="email"]', 'input[type="number"]', 'input[type="submit"]', 'input[type="image"]', 'label[for]', 'select', 'textarea', 'button', '.link']` |
 
 <br>  
 
@@ -142,16 +144,28 @@ const opts = {
 import AnimatedCursor from 'animated-cursor'
 
 // cursor options
-let options = {
-  color: '#fff',
-  outerAlpha: 0.3,
-  trailingSpeed: 0.2,
-  cursorSize: { inner: 8, outer: 38 }
+let acOptions = {
+  color: '#0ff',
+  outerAlpha: 0.25,
+  size: { 
+    inner: 8, 
+    outer: 38 
+  },
+  hoverScale: {
+    inner: 0.5,
+    outer: 1.4
+  },
+  clickScale: {
+    inner: 1.4,
+    outer: 0.1
+  }
 }
 
-const ac = AnimatedCursor(options)
+// Create Cursor instance
+const cursor = AnimatedCursor(acOptions)
 
-ac.init()
+// Init Cursor
+cursor.init()
 ```
 
 ### useRequiredStyles
@@ -159,6 +173,8 @@ ac.init()
 For the cursors to work, some styles are require for positioning, radius, pointer-events, stating opacity, and transitions.
 By default, AnimatedCursor adds these styles via JS, directly on the cursor elements. If you'd prefer, you can stop the lib from adding those inline styles in favor of css. 
 Just set `useRequiredStyles: false` and provide your own css to the inner/outer cursor selectors.
+
+This action would also allow you to modify the transition speed and easings of the cursors scaling (transform) animation.
 
 ```
 #cursor-inner,
@@ -171,3 +187,29 @@ Just set `useRequiredStyles: false` and provide your own css to the inner/outer 
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
 }
 ```
+
+### Create a Donut Cursor 
+
+The outerBorderSize option applies a border to the outer cursor. You can leverage this to create a Donut style cursor: 
+
+1. Set `outerAlpha` to `0`s (or almost 0), 
+2. Provide a numeric value for `outerBorderSize`                                                                                                                                                                                                                                                                                                                                                                                                                                                                         lkkklllklwhere the outer cursor is a ring, apply a border to the outer cursor and set the outerAlphd0 (or close to 0)
+
+```
+// cursor options
+let acOptions = {
+  color: '#0ff',
+  outerAlpha: 0,
+  outerBorderSize: 3
+}
+```
+
+<br/>
+
+## 📅 ToDos
+
+- ~~Provide ability to create Donut style cursor~~
+- ~~Add a demo for Donut-style cursor~~
+- ~~Make clickables an option.~~dsss
+- ~~Make hybrid npm module to support `import` and `require`~~.
+- Provide a destory method

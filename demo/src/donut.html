@@ -29,10 +29,10 @@
     rel="stylesheet"
   />
 </head>
-<body class="default">
-  <div id="cursor" class="cursor">
-    <div id="cursor-outer"></div>
-    <div id="cursor-inner"></div>
+<body class="donut">
+  <div id="cursor-donut" class="cursor">
+    <div id="donut-cursor-outer"></div>
+    <div id="donut-cursor-inner"></div>
   </div>
   <section class="app-header">
     <div class="app-header__grid">
@@ -44,68 +44,62 @@
       </a>
     </div>
   </section>
-
-    <section class="section">
-      <h1 class="page-title">
-        Animated Cursor 
-      </h1>
-      <nav class="app-nav">
-        <a class="is-active" href="index.html">Default</a> | 
-        <a href="donut.html">Donut</a>
-      </nav>
-      <p>
-        A pure JavaScript animated cursor lib that replaces the native cursor with a custom animated cursor. Zero deps, customizable and performant.
-      </p>
-      <p>
-        Hover over these <a>links</a> and see how that animated cursor does it's
-        thing. Kinda nifty, right? Not right for most things, but a nice move
-        for more interactive-type projects. Here's another <a href="">link to nowhere.</a>
-      </p>
-
-
-      <h3>Donut Cursor</h3>
-      <p>This demo is the default cursor, with zero options passed. Check out a Donut-style cursor <a href="./donut.html">Right Here</a></p>
+  <section class="section">
+    <h1 class="page-title">
+      Animated Cursor 
+    </h1>
+    <nav class="app-nav">
+      <a href="index.html">Default</a> | 
+      <a class="is-active" href="donut.html">Donut</a>
+    </nav>
+    <p>
+      A pure JavaScript animated cursor lib that replaces the native cursor with a custom animated cursor. Zero deps, customizable and performant.
+    </p>
+    <p>
+      Hover over these <a>links</a> and see how that animated cursor does it's
+      thing. Kinda nifty, right? Not right for most things, but a nice move
+      for more interactive-type projects. Here's another <a href="">link to nowhere.</a>
+    </p>
 
 
+    <h3>Default Cursor</h3>
+    <p>This demo uses options to create a Donut style cursor. Check out the default cursor with zero options passed <a href="./index.html">Right Here</a></p>
 
-      <p>Give it a go, let me know if you have any other feature ideas.</p>
+    
+    <h3>Clickables</h3>
+    <p>Let's do a text of all clickable elements:</p>
+    <ul>
+      <li><a>Basic Link Tag</a></li>
+      <li><button>Buttons</button></li>
+      <li><input type="submit" value="Submit" /></li>
+      <li>
+        <select>
+          <option>Select</option>
+        </select>
+      </li>
+      <li>
+        <input
+          type="image"
+          id="image-input"
+          alt="Image Input"
+          src="https://cdn2.iconfinder.com/data/icons/button-v1/30/25-512.png"
+          width="30px"
+        />
+      </li>
+      <li>
+        <label htmlFor="label_for">Label For</label
+        ><input type="radio" name="gender" id="label_for" value="label_for" />
+      </li>
+      <li><div class="link">class name ="link"</div></li>
+    </ul>
 
-      
-      <h3>Clickables</h3>
-      <p>Let's do a text of all clickable elements (customizable via options):</p>
-      <ul>
-        <li><a>Basic Link Tag</a></li>
-        <li><button>Buttons</button></li>
-        <li><input type="submit" value="Submit" /></li>
-        <li>
-          <select>
-            <option>Select</option>
-          </select>
-        </li>
-        <li>
-          <input
-            type="image"
-            id="image-input"
-            alt="Image Input"
-            src="https://cdn2.iconfinder.com/data/icons/button-v1/30/25-512.png"
-            width="30px"
-          />
-        </li>
-        <li>
-          <label htmlFor="label_for">Label For</label
-          ><input type="radio" name="gender" id="label_for" value="label_for" />
-        </li>
-        <li><div class="link">class name ="link"</div></li>
-      </ul>
-
-      <h3>Learn More</h3>
+    <h3>Learn More</h3>
 
       <p>For Docs, details and examples, check <a href="https://github.com/stephenscaff/animated-cursor">Animated Cursor's ReadMe</a></p>
-    </section>
-
-    <footer class="app-footer">
-      <i class="app-footer__icon">👻</i>
-      <p class="app-footer__text">A little thing made by <a href="http://stephenscaff.com" target="blank">Stephen Scaff</a></p>
-    </footer>
+  </section>
+  <footer class="app-footer">
+    <i class="app-footer__icon">👻</i>
+    <p class="app-footer__text">A little thing made by <a href="http://stephenscaff.com" target="blank">Stephen Scaff</a></p>
+  </footer>
   </body>
 </html>

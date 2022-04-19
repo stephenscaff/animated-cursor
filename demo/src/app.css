@@ -1,10 +1,13 @@
 /* Cursor vars if you wanna use css over css in js */
 
-html,
-body {
-  background-color: #120c10;
-  color: #fff;
-  font-family: 'Inter', sans-serif;
+:root {
+  --pad-sm: 2em;
+  --pad-md: 4em;
+  --pad-lg: 6em;
+  --font-main: "Work Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", "Monaco", monospace;
+  --body-bg-color: #312626;
+  --body-bg-color-donut: #120c10;
 }
 
 *,
@@ -13,9 +16,17 @@ body {
   box-sizing: border-box;
 }
 
-html {
-  background-color: $black;
+html,
+body {
+  background-color: var(--body-bg-color);
+  color: #fff;
+  font-family:  var(--font-main);
 }
+
+body.donut {
+  background-color: var(--body-bg-color-donut);
+}
+
 
 html,
 body {
@@ -40,13 +51,15 @@ a {
   text-decoration: none;
   color: #fff;
   font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
   transition: 0.5s ease;
 }
 
-a:hover {
+p a {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+}
+p a:hover {
   color: rgba(255, 255, 255, 0.5);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: rgba(255, 255, 255, 1);
 }
 
 .section {
@@ -58,9 +71,9 @@ a:hover {
   font-weight: 300;
 }
 
-.section__title {
-  margin-bottom: 0.75em;
-  font-size: 3em;
+.page-title {
+  margin-bottom: 0.25em;
+  font-size: 2.5em;
   font-weight: 800;
   line-height: 1.4;
 }
@@ -85,4 +98,60 @@ ul {
 ul li {
   padding-bottom: 1.5em;
   padding-left: 0;
+}
+
+.app-nav a.is-active {
+  opacity: 0.5;
+}
+
+.app-header {
+  z-index: 9;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 1em;
+  background-color: $color-grey-dark;
+}
+
+.app-header__grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-header__brand {
+  color: #fff;
+  font-size: 0.6em;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.app-header__icon .icon-github {
+  height: 1.5em;
+}
+.app-header__icon .icon-github path {
+  fill: var(--color-alpha, #fff);
+}
+
+.app-footer{
+  padding: var(--pad-sm) 0;
+  text-align: center;
+  color: $color-white;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.app-footer__icon {
+  display: block;
+  margin-bottom: 1em;
+  font-size: 1em;
+  font-style: normal;
+}
+
+.app-footer__text {
+  margin-bottom: 0;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  font-size: 0.65em;
+  text-transform: uppercase;
 }

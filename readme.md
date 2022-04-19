@@ -212,4 +212,5 @@ let acOptions = {
 - ~~Add a demo for Donut-style cursor~~
 - ~~Make clickables an option.~~dsss
 - ~~Make hybrid npm module to support `import` and `require`~~.
+- Limit to non touch or non mobile devices.
 - Provide a destory method

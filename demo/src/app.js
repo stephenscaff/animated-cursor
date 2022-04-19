@@ -1,7 +1,6 @@
 'use strict'
 
-// import AnimatedCursor from '../../src'
-//const AnimatedCursor = require('../../dist')
+import AnimatedCursor from '../../src'
 
 // Default Cursor
 if (document.querySelector('#cursor')) {

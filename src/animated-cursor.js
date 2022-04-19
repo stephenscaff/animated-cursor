@@ -49,7 +49,7 @@ const defaultOptions = {
  * Dots scale when hovering on clickables, or clicking.
  *
  * @param {Object} options 
- * @returns 
+ * @returns {Object} - api reveals init method
  */
 function AnimatedCursor(options) {
   // merge defaults with user options

@@ -23,15 +23,9 @@
     "lint": "eslint ./src/**js --fix"
   },
   "keywords": [
-    "animated",
-    "cursor",
-    "custom",
-    "cursor",
-    "cursor",
-    "js",
-    "cursor",
-    "vanilla",
-    "js",
+    "animated cursor",
+    "custom cursor",
+    "cursor animation",
     "cursor"
   ],
   "author": "Stephen Scaff",

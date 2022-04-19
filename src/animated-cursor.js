@@ -74,7 +74,7 @@ function AnimatedCursor(options) {
   function init() {
     bindEvents()
     startCursor()
-    if (settings.hasRequiredStyles) setCursorStyles()
+    if (opts.hasRequiredStyles) setCursorStyles()
     setCursorColor()
     setCursorSize()
   }
@@ -180,7 +180,12 @@ function AnimatedCursor(options) {
     settings.raf = requestAnimationFrame(animateOuterCursor)
   }
 
-  function onClickableHover(el) {33
+  /**
+   * On Clickable Hover 
+   * When hovering over a clickable, handle scale animation
+   * @param {HTMLelement} el 
+   */
+  function onClickableHover(el) {
     el.style.cursor = 'none'
 
     el.addEventListener('mouseover', () => {
@@ -196,7 +201,6 @@ function AnimatedCursor(options) {
 
   /**
    * Toggle Visibility 
-   * 
    */
   function toggleVisibility() {
     if (settings.isVisible) {
@@ -220,8 +224,8 @@ function AnimatedCursor(options) {
       'transform': 'translate(-50%, -50%)',
       'transition': 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out'
     }
-    setStyles('#cursor-inner', styles);
-    setStyles('#cursor-outer', styles);
+    setStyles(opts.cursorInnerSelector, styles);
+    setStyles(opts.cursorOuterSelector, styles);
   }
 
   /**

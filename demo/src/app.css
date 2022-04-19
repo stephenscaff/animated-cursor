@@ -22,11 +22,6 @@ body {
   cursor: none;
 }
 
-:root {
-  --cursor-color: "#09f"
-}
-
-
 /*
 #cursor-inner,
 #cursor-outer {
@@ -38,20 +33,7 @@ body {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
 }
 */
-/* #cursor-outer {
-  border: 3px solid currentColor;
-  background-color: var(--cursor-color);
-}
-#cursor-inner {
-  background-color: var(--cursor-color);
-} */
-/* #cursor-inner {
-  background-color: #fff;
-}
 
-#cursor-outer {
-  background-color: rgba(255, 255, 255, 0.3);
-} */
 
 /* Demo Content */
 a {

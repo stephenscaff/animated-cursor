@@ -73,6 +73,7 @@ ac.init()
 | `cursorInnerSelector`     | `String`          | Selector name of inner cursor element.                         | `#cursor-inner`   |
 | `cursorOuterSelector`     | `String`          | Selector name of outer cursor element.                         | `#cursor-outer`   |
 | `useRequiredStyles`       | `Boolean`         | If lib should add required styles to element.                  | `true`            |
+| `hideNativeCursor`        | `Boolean`         | If native cursor should be hidden via internal method adding inline styles to `html` and `body`. | `true`            |
 | `color`                   | `String`          | Hex value of desired color.                                    | `#D3245C`       |
 | `outerAlpha`              | `Number`          | Alpha transparency level of outer cursor (0 - 1).              | `0.3`       |
 | `outerBorderSize`         | `Number`          | Applies a border to the outer cursor.               | `0.3`    |
@@ -168,24 +169,17 @@ const cursor = AnimatedCursor(acOptions)
 cursor.init()
 ```
 
-### useRequiredStyles
+### Use `require`
 
-For the cursors to work, some styles are require for positioning, radius, pointer-events, stating opacity, and transitions.
-By default, AnimatedCursor adds these styles via JS, directly on the cursor elements. If you'd prefer, you can stop the lib from adding those inline styles in favor of css. 
-Just set `useRequiredStyles: false` and provide your own css to the inner/outer cursor selectors.
+AnimatedCursor is a hybrid npm module, so it supports both `import` and `require`. 
 
-This action would also allow you to modify the transition speed and easings of the cursors scaling (transform) animation.
+So, you can also `require` to lib like so:
 
 ```
-#cursor-inner,
-#cursor-outer {
-  pointer-events: none;
-  position: fixed;
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
-}
+const AnimatedCursor = require('animated-cursor')
+
+const cursor = AnimatedCursor(opts)
+cursor.init()
 ```
 
 ### Create a Donut Cursor 
@@ -208,12 +202,40 @@ let acOptions = {
 
 <br/>
 
+
+### useRequiredStyles
+
+For the cursors to work, some styles are require for positioning, radius, pointer-events, stating opacity, and transitions.
+By default, AnimatedCursor adds these styles via JS, directly on the cursor elements. If you'd prefer, you can stop the lib from adding those inline styles in favor of css. 
+Just set `useRequiredStyles: false` and provide your own css to the inner/outer cursor selectors.
+
+This action would also allow you to modify the transition speed and easings of the cursors scaling (transform) animation.
+
+```
+#cursor-inner,
+#cursor-outer {
+  pointer-events: none;
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
+}
+```
+
+###  hideNativeCursor
+
+The `hideNativeCursor` option is a `bool` that determins if native cursor should be hidden by adding inline styles to the `html` and `body` tags.
+Set to `false` if you want to maintain the native cursor, or if you'd rather hide the cursor with css.
+
+<br/>
+
 ## 📅 ToDos
 
 - ~~Provide ability to create Donut style cursor~~
 - ~~Add a demo for Donut-style cursor~~
-- ~~Make clickables an option.~~dsss
+- ~~Make clickables an option.~~
 - ~~Make hybrid npm module to support `import` and `require`~~.
 - ~~Make hiding native cursor an option.~~.
-- Limit to non touch or non mobile devices.
+- ~~Limit to non touch or non mobile devices.~~
 - Provide a destory method

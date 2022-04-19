@@ -518,10 +518,16 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _src = require("../../src");
 var _srcDefault = parcelHelpers.interopDefault(_src);
 'use strict';
-const cursor = _srcDefault.default();
-cursor.init();
+// Default Cursor
+if (document.querySelector('#cursor')) {
+    const cursor = _srcDefault.default();
+    cursor.init();
+}
+// Donut Cursor
 if (document.querySelector('#cursor-donut')) {
     let donutOpts = {
+        cursorInnerSelector: '#donut-cursor-inner',
+        cursorOuterSelector: '#donut-cursor-outer',
         color: '#0ff',
         outerAlpha: 0.1,
         outerBorderSize: 3,
@@ -867,4 +873,4 @@ exports.default = setStyles;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["kwnZB","86ByF"], "86ByF", "parcelRequire1176")
 
-//# sourceMappingURL=index.27ad7d95.js.map
+//# sourceMappingURL=donut.27ad7d95.js.map

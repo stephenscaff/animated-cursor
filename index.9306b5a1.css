@@ -1,7 +1,7 @@
 html, body {
   color: #fff;
   background-color: #120c10;
-  font-family: Inter, sans-serif;
+  font-family: Work Sans, sans-serif;
 }
 
 *, :before, :after {
@@ -48,7 +48,7 @@ a:hover {
 .sep {
   height: 2px;
   width: 3em;
-  backgroundcolor: #ffffff80;
+  background-color: #ffffff80;
   border: none;
   margin: 0 auto 2em;
 }

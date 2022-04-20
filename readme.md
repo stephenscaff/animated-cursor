@@ -12,7 +12,9 @@ A pure JS library to replace native cursor with a custom animated cursor.
 3. [🧬 Options](#-options)
 4. [🤖 Commands](#-commands)
 5. [🕹️ Usage](#-usage)
-6. [📅 To Dos](#-to-dos)
+6. [🎨 Cursor Types](#-cursor-types)
+7. [📓 Notes](#-notes)
+8. [📅 To Dos](#-to-dos)
 
 <br/>
 
@@ -27,11 +29,13 @@ A pure JS library to replace native cursor with a custom animated cursor.
 
 <br/>
 
-### Cursor is comprised of 
+### More the specifically, the cursor is made of
 - An inner dot (`cursorInner`)
 - An outer, outlining circle (`cursorOuter`), with slight opacity based on the inner cursor's color
 - A slight trailing animation of the outer outline
 - An inversely scaling effect between the inner and outer cursor parts on click or link hover
+- Outer cursor can also be just a border to create a Donut style cursor.
+- Outer cursor can have a blend-mode applied for an exlusion effect over hovered text / elements.
 
 <br>
 
@@ -77,6 +81,7 @@ ac.init()
 | `color`                   | `String`          | Hex value of desired color.                                    | `#D3245C`       |
 | `outerAlpha`              | `Number`          | Alpha transparency level of outer cursor (0 - 1).              | `0.3`       |
 | `outerBorderSize`         | `Number`          | Applies a border to the outer cursor.               | `0.3`    |
+| `hasOuterBlendMode`       | `Boolean`         | Applies a blend-mode to the outer cursor                       | `0.3`    |
 | `size`                    | `Object`          | Defines inner `size.inner` and Outer `size.outer` cursor sizes | `size: { inner: 8, outer: 40 }` |
 | `hoverScale`              | `Object`          | Defines amounts inner/outer cursors scale on hover             | `hoverScale: { inner: 0.75, outer: 1.5 }` |
 | `clickScale`              | `Object`          | Defines amounts inner/outer cursors scale on click             | `clickScale: { inner: 1.5, outer: 0.13 }` |
@@ -182,6 +187,10 @@ const cursor = AnimatedCursor(opts)
 cursor.init()
 ```
 
+
+## 🎨 Cursor Types
+
+You can use the options to create various cursor types / styles. (At some point I might organize cursor types as presets.)
 ### Create a Donut Cursor 
 
 The outerBorderSize option applies a border to the outer cursor. You can leverage this to create a Donut style cursor: 
@@ -190,8 +199,8 @@ The outerBorderSize option applies a border to the outer cursor. You can leverag
 2. Provide a numeric value for `outerBorderSize`                                                                                                                                                                                                                                                                                                                                                                                                                                                                         lkkklllklwhere the outer cursor is a ring, apply a border to the outer cursor and set the outerAlphd0 (or close to 0)
 
 ```
-// cursor options
-let acOptions = {
+// Options to create a Donut cursor
+let donutOpts = {
   color: '#0ff',
   outerAlpha: 0,
   outerBorderSize: 3
@@ -202,6 +211,29 @@ let acOptions = {
 
 <br/>
 
+### Create a Blend-mode Cursor 
+
+You can create a neat Blend-mode cursor that filters the hovered text through the cursor. This probably works best with White / Black cursors.
+
+1. Set `hasOuterBlendMode: true`, 
+2. Set `outerAlpha` to `1` or close to `1`.
+3. Probs use a cursor color like `#fff` or `#000`.  
+
+Note, make sure your inner and outer cursor elements are wrapped inside a parent (as show in the examples) as the `parentElement` of outer cursor is targets for the `blend-mode` filter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                     lkkklllklwhere the outer cursor is a ring, apply a border to the outer cursor and set the outerAlphd0 (or close to 0)
+
+```
+// Options to create a blend-mode cursor.
+// Cursor is white, page background-color is dark.
+ let blendOpts = {
+    hasOuterBlendMode: true,
+    color: '#fff',
+    outerAlpha: 1
+ }
+```
+
+[Check out the Blend-mode Cursor Demo](https://stephenscaff.github.io/animated-cursor/blend.html)
+
+## 📓 Notes
 
 ### useRequiredStyles
 
@@ -222,6 +254,7 @@ This action would also allow you to modify the transition speed and easings of t
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
 }
 ```
+<br/>
 
 ###  hideNativeCursor
 
@@ -230,7 +263,7 @@ Set to `false` if you want to maintain the native cursor, or if you'd rather hid
 
 <br/>
 
-## 📅 ToDos
+## 📅 To Dos
 
 - ~~Provide ability to create Donut style cursor~~
 - ~~Add a demo for Donut-style cursor~~
@@ -239,3 +272,4 @@ Set to `false` if you want to maintain the native cursor, or if you'd rather hid
 - ~~Make hiding native cursor an option.~~.
 - ~~Limit to non touch or non mobile devices.~~
 - Provide a destory method
+- Maybe make different cursor types available as presets?

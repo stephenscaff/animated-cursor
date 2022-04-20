@@ -8,6 +8,7 @@
   --font-mono: "IBM Plex Mono", "Monaco", monospace;
   --body-bg-color: #312626;
   --body-bg-color-donut: #120c10;
+  --body-bg-color-blend: rgb(9, 9, 9);
 }
 
 *,
@@ -21,12 +22,28 @@ body {
   background-color: var(--body-bg-color);
   color: #fff;
   font-family:  var(--font-main);
+  animation: fade-in 0.3s 0.1s ease both;
 }
 
 body.donut {
   background-color: var(--body-bg-color-donut);
 }
 
+body.blend {
+  background-color: var(--body-bg-color-blend);
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* #blend-cursor {
+  mix-blend-mode: exclusion;
+} */
 
 /* html,
 body {
@@ -57,6 +74,7 @@ a {
 p a {
   border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 }
+
 p a:hover {
   color: rgba(255, 255, 255, 0.5);
   border-bottom-color: rgba(255, 255, 255, 1);
@@ -76,14 +94,6 @@ p a:hover {
   font-size: 2.5em;
   font-weight: 800;
   line-height: 1.4;
-}
-
-.sep {
-  border: 0;
-  margin: 0 auto 2em;
-  height: 2;
-  width: 3em;
-  background-color: rgba(255, 255, 255, 0.5);
 }
 
 h3 {
@@ -131,6 +141,7 @@ ul li {
 .app-header__icon .icon-github {
   height: 1.5em;
 }
+
 .app-header__icon .icon-github path {
   fill: var(--color-alpha, #fff);
 }
@@ -141,6 +152,7 @@ ul li {
   color: $color-white;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
+
 .app-footer__icon {
   display: block;
   margin-bottom: 1em;

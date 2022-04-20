@@ -14,6 +14,7 @@ const defaultOptions = {
   color: '#D3245C',
   outerAlpha: 0.3,
   outerBorderSize: 0,
+  hasOuterBlendMode: false,
   size: { 
     inner: 8, 
     outer: 40 
@@ -86,6 +87,7 @@ function AnimatedCursor(options) {
     if (opts.hideNativeCursor) hideNativeCursor()
     if (opts.hasRequiredStyles) setCursorStyles()
     if (opts.outerBorderSize > 0) setOuterBorder()
+    if (opts.hasOuterBlendMode > 0) setOuterBlendMode()
   }
 
   /**
@@ -262,14 +264,15 @@ function AnimatedCursor(options) {
    */
   function setScale() {
     if (settings.isClicking) {
-      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.clickScale.inner})`
-      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.clickScale.outer})`
+      settings.cursorInner.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.clickScale.inner})`)
+      settings.cursorOuter.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.clickScale.outer})`)
+
     } else if (settings.isScaled) {
-      settings.cursorInner.style.transform = `translate(-50%, -50%) scale(${opts.hoverScale.inner})`
-      settings.cursorOuter.style.transform = `translate(-50%, -50%) scale(${opts.hoverScale.outer})`
+      settings.cursorInner.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.hoverScale.inner})`)
+      settings.cursorOuter.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.hoverScale.outer})`)
     } else {
-      settings.cursorInner.style.transform = 'translate(-50%, -50%) scale(1)'
-      settings.cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)'
+      settings.cursorInner.style.setProperty('transform', `translate(-50%, -50%) scale(1)`)
+      settings.cursorOuter.style.setProperty('transform', `translate(-50%, -50%) scale(1)`)
     }
   }
 
@@ -292,6 +295,17 @@ function AnimatedCursor(options) {
       'border', 
       `${opts.outerBorderSize}px solid ${opts.color}`
     )
+  }
+
+  /**
+   * Set Outer Blend Mode 
+   * Adds blend mode exclusion effect to outer cursor
+   */
+  function setOuterBlendMode() {
+    const cursorEl = settings.cursorOuter.parentElement;
+
+    if (cursorEl)
+      cursorEl.style.setProperty('mix-blend-mode', 'exclusion')
   }
 
   return {

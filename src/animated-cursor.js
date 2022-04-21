@@ -45,9 +45,8 @@ const defaultOptions = {
 
 /**
  * Animated Cursor
- * Creates a custom animated cursor consisting of an outer and inner circles/dots.
- * Outer dot has trailing animation effect.
- * Dots scale when hovering on clickables, or clicking.
+ * Replaces the browser's native cursor with a custom animated cursor. 
+ * Options enable creation of different cursor experiences.
  *
  * @param {Object} options 
  * @returns {Object} - api reveals init method
@@ -76,10 +75,8 @@ function AnimatedCursor(options) {
    * @public
    */
   function init() {
-
     // bail if Touch device
     if (isTouchDevice()) return
-
     bindEvents()
     startCursor()
     setCursorColor()
@@ -91,34 +88,17 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Bind Main Events
-   * Handles primary mouse and click events
+   * Binds main mouse and click events
    */
   function bindEvents() {
-
-    window.addEventListener('mousemove', onMouseMove)
-    
     document
-      .querySelectorAll(opts.clickables.join(','))
-      .forEach((el) => onClickableHover(el))
+    .querySelectorAll(opts.clickables.join(','))
+    .forEach((el) => onClickableHover(el))
 
-    document.addEventListener('mousedown', () => {
-      settings.isClicking = true
-      setScale()
-    })
-
-    document.addEventListener('mouseup', () => {
-      settings.isScaled = false
-      settings.isClicking = false
-      setScale()
-    })
-
-    document.addEventListener('mouseleave', (e) => {
-      if (hasExitedViewport(e)) {
-        settings.isVisible = false
-        toggleVisibility()
-      }
-    })
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mousedown', onMouseDown)
+    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('mouseleave', (e) => onMouseLeave(e))
   }
 
   /**
@@ -131,7 +111,6 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * on Mouse Move 
    * Handles the cursor mouse event, sending x,y coords to animation events.
    * Uses RAF loop for outer/trailing cursor animation.
    * @param {Event} e - mousemove event 
@@ -148,19 +127,48 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Animate Inner Cursor 
+   * Handles mousedown event, 
+   * updating cursor scale
+   */
+  function onMouseDown() {
+    settings.isClicking = true
+    setScale()
+  }
+
+  /**
+   * Handles mouseup event, 
+   * updating cursor scale
+   */
+  function onMouseUp() {
+    settings.isScaled = false
+    settings.isClicking = false
+    setScale()
+  }
+
+  /**
+   * Handles mouseleave event, 
+   * updating cursor visibility
+   * @param {Event} e - mouseleave event
+   */
+  function onMouseLeave(e) {
+    if (hasExitedViewport(e)) {
+      settings.isVisible = false
+      toggleVisibility()
+    }
+  }
+
+  /**
+   * Animates inner cursor by setting x, y coords on mousemove
    * @param {Number} y - y coords
    * @param {Number} x - x coords
    */
   function animateInnerCursor(y, x) {
-    settings.cursorInner.style.top = `${y}px`
-    settings.cursorInner.style.left = `${x}px`
+    settings.cursorInner.style.setProperty('top', `${y}px`);
+    settings.cursorInner.style.setProperty('left', `${x}px`); 
   }
 
   /**
-   * Animate Outer Cursor 
-   * Outer cursor trailing animation. Uses lerp
-   * @returns 
+   * Animate Outer Cursor with a lerp-eased trailing animation. 
    */
   function animateOuterCursor() {
     //calculate lerped values
@@ -174,8 +182,8 @@ function AnimatedCursor(options) {
       settings.targetPos.y,
       opts.trailingSpeed
     )
-    settings.cursorOuter.style.top = `${settings.cursorPos.y}px`
-    settings.cursorOuter.style.left = `${settings.cursorPos.x}px`
+    settings.cursorOuter.style.setProperty('top', `${settings.cursorPos.y}px`);
+    settings.cursorOuter.style.setProperty('left', `${settings.cursorPos.x}px`);  
 
     //cancel loop if mouse stops moving
     const delta = Math.sqrt(
@@ -193,7 +201,6 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * On Clickable Hover 
    * When hovering over a clickable, handle scale animation
    * @param {HTMLelement} el 
    */
@@ -212,28 +219,28 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Toggle Visibility 
+   * Toggle Cursor visibility 
    */
   function toggleVisibility() {
     if (settings.isVisible) {
-      settings.cursorInner.style.opacity = 1
-      settings.cursorOuter.style.opacity = 1
+      settings.cursorInner.style.setProperty('opacity', 1)
+      settings.cursorOuter.style.setProperty('opacity', 1)
     } else {
-      settings.cursorInner.style.opacity = 0
-      settings.cursorOuter.style.opacity = 0
+      settings.cursorInner.style.setProperty('opacity', 0)
+      settings.cursorOuter.style.setProperty('opacity', 0)
     }
   }
 
   /**
-   * Hide Native Cursor
+   * Hide Browser's native cursor
    */
   function hideNativeCursor() {
-    document.querySelector('body').style.cursor = 'none'
-    document.querySelector('html').style.cursor = 'none'
+    document.querySelector('body').style.setProperty('cursor', 'none');
+    document.querySelector('html').style.setProperty('cursor', 'none');
   }
 
   /**
-   * Set Required Cursor Styles
+   * Set required Cursor styles
    */
   function setCursorStyles() {
     const styles = {
@@ -250,7 +257,7 @@ function AnimatedCursor(options) {
 
 
   /**
-   * Set Cursor Sizes
+   * Set Cursor's resting sizes
    */
   function setCursorSize() {
     settings.cursorInner.style.setProperty('width', `${opts.size.inner}px`)
@@ -264,20 +271,37 @@ function AnimatedCursor(options) {
    */
   function setScale() {
     if (settings.isClicking) {
-      settings.cursorInner.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.clickScale.inner})`)
-      settings.cursorOuter.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.clickScale.outer})`)
-
+      settings.cursorInner.style.setProperty(
+        'transform', 
+        `translate(-50%, -50%) scale(${opts.clickScale.inner})`
+      )
+      settings.cursorOuter.style.setProperty(
+        'transform', 
+        `translate(-50%, -50%) scale(${opts.clickScale.outer})`
+      )
     } else if (settings.isScaled) {
-      settings.cursorInner.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.hoverScale.inner})`)
-      settings.cursorOuter.style.setProperty('transform', `translate(-50%, -50%) scale(${opts.hoverScale.outer})`)
+      settings.cursorInner.style.setProperty(
+        'transform', 
+        `translate(-50%, -50%) scale(${opts.hoverScale.inner})`
+      )
+      settings.cursorOuter.style.setProperty(
+        'transform', 
+        `translate(-50%, -50%) scale(${opts.hoverScale.outer})`
+      )
     } else {
-      settings.cursorInner.style.setProperty('transform', `translate(-50%, -50%) scale(1)`)
-      settings.cursorOuter.style.setProperty('transform', `translate(-50%, -50%) scale(1)`)
+      settings.cursorInner.style.setProperty(
+        'transform', 
+        `translate(-50%, -50%) scale(1)`
+      )
+      settings.cursorOuter.style.setProperty(
+        'transform', 
+        `translate(-50%, -50%) scale(1)`
+      )
     }
   }
 
   /**
-   * Set Cursor Color
+   * Sets the Cursor                               x
    */
   function setCursorColor() {
     const colorInner = hexToRGB(opts.color)
@@ -287,8 +311,9 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Set Outer Cursor Border 
-   * Creates a donut cursor if outerAlpha is also 0
+   * Sets a border for Outer Cursor 
+   * to create a donut-style cursor 
+   * (if outerAlpha is or is close to 0)
    */
   function setOuterBorder() {
     settings.cursorOuter.style.setProperty(
@@ -308,6 +333,7 @@ function AnimatedCursor(options) {
       cursorEl.style.setProperty('mix-blend-mode', 'exclusion')
   }
 
+  // API
   return {
     init: init
   }

@@ -23,6 +23,8 @@ body {
   color: #fff;
   font-family:  var(--font-main);
   animation: fade-in 0.3s 0.1s ease both;
+  margin: 0;
+  padding: 0;
 }
 
 body.donut {

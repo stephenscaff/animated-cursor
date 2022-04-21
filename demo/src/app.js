@@ -51,7 +51,7 @@ if (document.querySelector('#blend-cursor ')) {
     },
     hoverScale: {
       inner: 0.5,
-      outer: 1.4
+      çouter: 1.4
     },
     clickScale: {
       inner: 1.4,

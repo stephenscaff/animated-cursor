@@ -47,11 +47,11 @@ if (document.querySelector('#blend-cursor ')) {
     outerAlpha: 1,
     size: { 
       inner: 8, 
-      outer: 30 
+      outer: 35 
     },
     hoverScale: {
       inner: 0.5,
-      çouter: 1.4
+      outer: 1.7
     },
     clickScale: {
       inner: 1.4,

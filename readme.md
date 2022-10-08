@@ -68,6 +68,26 @@ ac.init()
 
 <br/>
 
+### Use from CDN / script
+
+To include via CDN, find the latest UMD version at https://unpkg.com/animated-cursor and include via script tag, like so:
+
+```
+<script src="https://unpkg.com/animated-cursor@1.1.1/dist/index.umd.js"></script>
+```
+
+then call and init:
+
+```
+const ac = window.animatedCursor()
+
+ac.init()
+```
+
+[Working example](https://codepen.io/StephenScaff/pen/poVxNoB)
+
+<br/>
+
 ## 🧬 Options
 
 `AnimatedCursor()` accepts a single options param, which supports the following properties:

@@ -4,11 +4,12 @@
   --pad-sm: 2em;
   --pad-md: 4em;
   --pad-lg: 6em;
-  --font-main: "Work Sans", sans-serif;
-  --font-mono: "IBM Plex Mono", "Monaco", monospace;
-  --body-bg-color: #312626;
-  --body-bg-color-donut: #120c10;
-  --body-bg-color-blend: rgb(9, 9, 9);
+  --font-main: 'Work Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Monaco', monospace;
+  --color-body-bg: #312626;
+  --color-body-bg-donut: #120c10;
+  --color-body-bg-blend: rgb(9, 9, 9);
+  --cursor-color: #fff;
 }
 
 *,
@@ -19,20 +20,20 @@
 
 html,
 body {
-  background-color: var(--body-bg-color);
+  background-color: var(--color-body-bg);
   color: #fff;
-  font-family:  var(--font-main);
+  font-family: var(--font-main);
   animation: fade-in 0.3s 0.1s ease both;
   margin: 0;
   padding: 0;
 }
 
 body.donut {
-  background-color: var(--body-bg-color-donut);
+  background-color: var(--color-body-bg-donut);
 }
 
 body.blend {
-  background-color: var(--body-bg-color-blend);
+  background-color: var(--color-body-bg-blend);
 }
 
 @keyframes fade-in {
@@ -43,27 +44,6 @@ body.blend {
     opacity: 1;
   }
 }
-/* #blend-cursor {
-  mix-blend-mode: exclusion;
-} */
-
-/* html,
-body {
-  cursor: none;
-} */
-
-/*
-#cursor-inner,
-#cursor-outer {
- pointer-events: none;
-  position: fixed;
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
-}
-*/
-
 
 /* Demo Content */
 a {
@@ -122,7 +102,6 @@ ul li {
   top: 0;
   width: 100%;
   padding: 1em;
-  background-color: $color-grey-dark;
 }
 
 .app-header__grid {
@@ -148,11 +127,10 @@ ul li {
   fill: var(--color-alpha, #fff);
 }
 
-.app-footer{
+.app-footer {
   padding: var(--pad-sm) 0;
   text-align: center;
-  color: $color-white;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .app-footer__icon {
@@ -168,4 +146,8 @@ ul li {
   letter-spacing: 0.1em;
   font-size: 0.65em;
   text-transform: uppercase;
+}
+
+#blend-cursor-inner {
+  background-color: pink;
 }

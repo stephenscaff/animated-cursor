@@ -98,17 +98,19 @@ ac.init()
 | --------------------- | --------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `cursorInnerSelector` | `String`  | Selector name of inner cursor element.                                                           | `#cursor-inner`                                                                                                                                                                    |
 | `cursorOuterSelector` | `String`  | Selector name of outer cursor element.                                                           | `#cursor-outer`                                                                                                                                                                    |
+| `cursorInnerStyles`   | `Object`  | Adds inline styles to Inner cursor                                                               | `null`                                                                                                                                                                             |
+| `cursorOuterStyles`   | `Object`  | Ads inline styles to Outer cursor                                                                | `null`                                                                                                                                                                             |
 | `hasRequiredStyles`   | `Boolean` | If lib should add required styles to element.                                                    | `true`                                                                                                                                                                             |
 | `hideNativeCursor`    | `Boolean` | If native cursor should be hidden via internal method adding inline styles to `html` and `body`. | `true`                                                                                                                                                                             |
 | `color`               | `String`  | Hex value of desired color.                                                                      | `#D3245C`                                                                                                                                                                          |
 | `outerAlpha`          | `Number`  | Alpha transparency level of outer cursor (0 - 1).                                                | `0.3`                                                                                                                                                                              |
 | `outerBorderSize`     | `Number`  | Applies a border to the outer cursor.                                                            | `0.3`                                                                                                                                                                              |
 | `hasOuterBlendMode`   | `Boolean` | Applies a blend-mode to the outer cursor                                                         | `0.3`                                                                                                                                                                              |
-| `size`                | `Object`  | Defines inner `size.inner` and Outer `size.outer` cursor sizes                                   | `size: { inner: 8, outer: 40 }`                                                                                                                                                    |
+| `size`                | `Object`  | Defines inner `size.inner` and Outer `size.outer` cursor sizes X                                 | `size: { inner: 8, outer: 40 }`                                                                                                                                                    |
 | `hoverScale`          | `Object`  | Defines amounts inner/outer cursors scale on hover                                               | `hoverScale: { inner: 0.75, outer: 1.5 }`                                                                                                                                          |
 | `clickScale`          | `Object`  | Defines amounts inner/outer cursors scale on click                                               | `clickScale: { inner: 1.5, outer: 0.13 }`                                                                                                                                          |
 | `trailingSpeed`       | `Number`  | Speed of outer cursor's lerp'd trailing animation                                                | `0.2`                                                                                                                                                                              |
-| `clickables`          | `Array`   | Array of clickable elements. d                                                                   | `['a', 'input[type="text"]', 'input[type="email"]', 'input[type="number"]', 'input[type="submit"]', 'input[type="image"]', 'label[for]', 'select', 'textarea', 'button', '.link']` |
+| `clickables`          | `Array`   | Array of clickable elements.                                                                     | `['a', 'input[type="text"]', 'input[type="email"]', 'input[type="number"]', 'input[type="submit"]', 'input[type="image"]', 'label[for]', 'select', 'textarea', 'button', '.link']` |
 
 <br>
 
@@ -236,25 +238,32 @@ let donutOpts = {
 
 You can create a neat Blend-mode cursor that filters the hovered text through the cursor. This probably works best with White / Black cursors.
 
-1. Set `hasOuterBlendMode: true`,
-2. Set `outerAlpha` to `1` or close to `1`.
-3. Probs use a cursor color like `#fff` or `#000`.
-
-Note, make sure your inner and outer cursor elements are wrapped inside a parent (as show in the examples) as the `parentElement` of outer cursor is targets for the `blend-mode` filter. lkkklllklwhere the outer cursor is a ring, apply a border to the outer cursor and set the outerAlphd0 (or close to 0)
+1. Pass inline styles via `cursorInnerStyles` and `cursorOuterStyles` that define `mixBlendMode: 'exclusion'`
+2. Simply pass cursor color as css variable via `backgroundColor`
+3. Probs use a cursor color like `#fff` or `#000` depending on page bg color.
 
 ```
 // Options to create a blend-mode cursor.
 // Cursor is white, page background-color is dark.
- let blendOpts = {
-    hasOuterBlendMode: true,
-    color: '#fff',
-    outerAlpha: 1
- }
+let blendOpts = {
+  cursorInnerStyles: {
+    backgroundColor: 'var(--cursor-color)', // white
+    mixBlendMode: 'exclusion'
+  },
+  cursorOuterStyles: {
+    backgroundColor: 'var(--cursor-color)', // white
+    mixBlendMode: 'exclusion'
+  }
+}
 ```
 
 [Check out the Blend-mode Cursor Demo](https://stephenscaff.github.io/animated-cursor/blend.html)
 
 ## 📓 Notes
+
+### Passing cursor styles
+
+The options `cursorInnerStyles` and `cursorOuterStyles` pass inline styles directly to the cursor's inner / outer elements. This allows you to easily create custom and dynamic cursors. For example, you can simply pass css variables to define and update cursor colors, or you can create a Mixed Blend Mode-style cursor by passing `mixBlendMode: 'exclusion'`.
 
 ### hasRequiredStyles
 

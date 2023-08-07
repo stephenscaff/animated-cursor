@@ -3,21 +3,21 @@ import hasExitedViewport from './utils/has-exited-viewport'
 import hexToRGB from './utils/hex-to-rgb'
 import setStyles from './utils/set-styles'
 import isTouchDevice from './utils/is-touch-device'
-
-'use strict'
+;('use strict')
 
 const defaultOptions = {
   cursorInnerSelector: '#cursor-inner',
   cursorOuterSelector: '#cursor-outer',
+  cursorInnerStyles: null,
+  cursorOuterStyles: null,
   hasRequiredStyles: true,
   hideNativeCursor: true,
   color: '#D3245C',
   outerAlpha: 0.3,
   outerBorderSize: 0,
-  hasOuterBlendMode: false,
-  size: { 
-    inner: 8, 
-    outer: 40 
+  size: {
+    inner: 8,
+    outer: 40
   },
   hoverScale: {
     inner: 0.75,
@@ -45,19 +45,21 @@ const defaultOptions = {
 
 /**
  * Animated Cursor
- * Replaces the browser's native cursor with a custom animated cursor. 
+ * Replaces the browser's native cursor with a custom animated cursor.
  * Options enable creation of different cursor experiences.
  *
- * @param {Object} options 
+ * @param {Object} options
  * @returns {Object} - api reveals init method
  */
 function AnimatedCursor(options) {
   // merge defaults with user options
-  let opts = Object.assign({}, defaultOptions, options);
+  let opts = Object.assign({}, defaultOptions, options)
 
   let settings = {
     cursorInner: document.querySelector(opts.cursorInnerSelector),
     cursorOuter: document.querySelector(opts.cursorOuterSelector),
+    cursorInnerStyles: opts.cursorInnerStyles,
+    cursorOuterStyles: opts.cursorOuterStyles,
     hasRequiredStyles: opts.hasRequiredStyles,
     targetPos: { x: 0.5, y: 0.5 }, // mouse position
     cursorPos: { x: 0.5, y: 0.5 }, // cursor position
@@ -68,9 +70,9 @@ function AnimatedCursor(options) {
     isScaled: false,
     isClicking: false
   }
-  
+
   /**
-   * Init 
+   * Init
    * Kicks off all the things
    * @public
    */
@@ -84,7 +86,6 @@ function AnimatedCursor(options) {
     if (opts.hideNativeCursor) hideNativeCursor()
     if (opts.hasRequiredStyles) setCursorStyles()
     if (opts.outerBorderSize > 0) setOuterBorder()
-    if (opts.hasOuterBlendMode > 0) setOuterBlendMode()
   }
 
   /**
@@ -92,8 +93,8 @@ function AnimatedCursor(options) {
    */
   function bindEvents() {
     document
-    .querySelectorAll(opts.clickables.join(','))
-    .forEach((el) => onClickableHover(el))
+      .querySelectorAll(opts.clickables.join(','))
+      .forEach((el) => onClickableHover(el))
 
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mousedown', onMouseDown)
@@ -113,7 +114,7 @@ function AnimatedCursor(options) {
   /**
    * Handles the cursor mouse event, sending x,y coords to animation events.
    * Uses RAF loop for outer/trailing cursor animation.
-   * @param {Event} e - mousemove event 
+   * @param {Event} e - mousemove event
    */
   function onMouseMove(e) {
     settings.isVisible = true
@@ -127,7 +128,7 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Handles mousedown event, 
+   * Handles mousedown event,
    * updating cursor scale
    */
   function onMouseDown() {
@@ -136,7 +137,7 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Handles mouseup event, 
+   * Handles mouseup event,
    * updating cursor scale
    */
   function onMouseUp() {
@@ -146,7 +147,7 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Handles mouseleave event, 
+   * Handles mouseleave event,
    * updating cursor visibility
    * @param {Event} e - mouseleave event
    */
@@ -163,12 +164,12 @@ function AnimatedCursor(options) {
    * @param {Number} x - x coords
    */
   function animateInnerCursor(y, x) {
-    settings.cursorInner.style.setProperty('top', `${y}px`);
-    settings.cursorInner.style.setProperty('left', `${x}px`); 
+    settings.cursorInner.style.setProperty('top', `${y}px`)
+    settings.cursorInner.style.setProperty('left', `${x}px`)
   }
 
   /**
-   * Animate Outer Cursor with a lerp-eased trailing animation. 
+   * Animate Outer Cursor with a lerp-eased trailing animation.
    */
   function animateOuterCursor() {
     //calculate lerped values
@@ -182,15 +183,15 @@ function AnimatedCursor(options) {
       settings.targetPos.y,
       opts.trailingSpeed
     )
-    settings.cursorOuter.style.setProperty('top', `${settings.cursorPos.y}px`);
-    settings.cursorOuter.style.setProperty('left', `${settings.cursorPos.x}px`);  
+    settings.cursorOuter.style.setProperty('top', `${settings.cursorPos.y}px`)
+    settings.cursorOuter.style.setProperty('left', `${settings.cursorPos.x}px`)
 
     //cancel loop if mouse stops moving
     const delta = Math.sqrt(
       Math.pow(settings.targetPos.x - settings.cursorPos.x, 2) +
         Math.pow(settings.targetPos.y - settings.cursorPos.y, 2)
     )
-     
+
     if (delta < 0.001) {
       window.cancelAnimationFrame(settings.raf)
       settings.raf = null
@@ -202,7 +203,7 @@ function AnimatedCursor(options) {
 
   /**
    * When hovering over a clickable, handle scale animation
-   * @param {HTMLelement} el 
+   * @param {HTMLelement} el
    */
   function onClickableHover(el) {
     el.style.cursor = 'none'
@@ -219,7 +220,7 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Toggle Cursor visibility 
+   * Toggle Cursor visibility
    */
   function toggleVisibility() {
     if (settings.isVisible) {
@@ -235,8 +236,8 @@ function AnimatedCursor(options) {
    * Hide Browser's native cursor
    */
   function hideNativeCursor() {
-    document.querySelector('body').style.setProperty('cursor', 'none');
-    document.querySelector('html').style.setProperty('cursor', 'none');
+    document.querySelector('body').style.setProperty('cursor', 'none')
+    document.querySelector('html').style.setProperty('cursor', 'none')
   }
 
   /**
@@ -245,16 +246,17 @@ function AnimatedCursor(options) {
   function setCursorStyles() {
     const styles = {
       'pointer-events': 'none',
-      'position': 'fixed',
+      position: 'fixed',
       'border-radius': '50%',
-      'opacity': 0,
-      'transform': 'translate(-50%, -50%)',
-      'transition': 'opacity 0.25s ease-in-out, transform 0.25s ease-in-out'
+      opacity: 0,
+      transform: 'translate(-50%, -50%)',
+      transition: 'opacity 0.25s ease-in-out, transform 0.25s ease-in-out'
     }
-    setStyles(opts.cursorInnerSelector, styles);
-    setStyles(opts.cursorOuterSelector, styles);
+    setStyles(opts.cursorInnerSelector, styles)
+    setStyles(opts.cursorOuterSelector, styles)
+    setStyles(opts.cursorInnerSelector, opts.cursorInnerStyles)
+    setStyles(opts.cursorOuterSelector, opts.cursorOuterStyles)
   }
-
 
   /**
    * Set Cursor's resting sizes
@@ -272,29 +274,29 @@ function AnimatedCursor(options) {
   function setScale() {
     if (settings.isClicking) {
       settings.cursorInner.style.setProperty(
-        'transform', 
+        'transform',
         `translate(-50%, -50%) scale(${opts.clickScale.inner})`
       )
       settings.cursorOuter.style.setProperty(
-        'transform', 
+        'transform',
         `translate(-50%, -50%) scale(${opts.clickScale.outer})`
       )
     } else if (settings.isScaled) {
       settings.cursorInner.style.setProperty(
-        'transform', 
+        'transform',
         `translate(-50%, -50%) scale(${opts.hoverScale.inner})`
       )
       settings.cursorOuter.style.setProperty(
-        'transform', 
+        'transform',
         `translate(-50%, -50%) scale(${opts.hoverScale.outer})`
       )
     } else {
       settings.cursorInner.style.setProperty(
-        'transform', 
+        'transform',
         `translate(-50%, -50%) scale(1)`
       )
       settings.cursorOuter.style.setProperty(
-        'transform', 
+        'transform',
         `translate(-50%, -50%) scale(1)`
       )
     }
@@ -311,27 +313,26 @@ function AnimatedCursor(options) {
   }
 
   /**
-   * Sets a border for Outer Cursor 
-   * to create a donut-style cursor 
+   * Sets a border for Outer Cursor
+   * to create a donut-style cursor
    * (if outerAlpha is or is close to 0)
    */
   function setOuterBorder() {
     settings.cursorOuter.style.setProperty(
-      'border', 
+      'border',
       `${opts.outerBorderSize}px solid ${opts.color}`
     )
   }
 
   /**
-   * Set Outer Blend Mode 
+   * Set Outer Blend Mode
    * Adds blend mode exclusion effect to outer cursor
    */
-  function setOuterBlendMode() {
-    const cursorEl = settings.cursorOuter.parentElement;
+  // function setOuterBlendMode() {
+  //   const cursorEl = settings.cursorOuter.parentElement
 
-    if (cursorEl)
-      cursorEl.style.setProperty('mix-blend-mode', 'exclusion')
-  }
+  //   if (cursorEl) cursorEl.style.setProperty('mix-blend-mode', 'exclusion')
+  // }
 
   // API
   return {
@@ -339,6 +340,6 @@ function AnimatedCursor(options) {
   }
 }
 
-AnimatedCursor.options = defaultOptions;
+AnimatedCursor.options = defaultOptions
 
-export default AnimatedCursor;
+export default AnimatedCursor

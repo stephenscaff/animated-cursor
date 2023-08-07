@@ -1,6 +1,6 @@
 {
   "name": "animated-cursor",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Create a custom, animated cursor in pure JS.",
   "repository": {
     "type": "git",
